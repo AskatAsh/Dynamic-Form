@@ -1,7 +1,9 @@
 import { useState } from "react";
 
 function DynamicForm() {
-  const [formData, setFormData] = useState([{ input: "", select: "" }]);
+  const [formData, setFormData] = useState(
+    JSON.parse(localStorage.getItem("formData")) || [{ input: "", select: "" }]
+  );
 
   const [submittedData, setSubmittedData] = useState(null);
 
@@ -12,6 +14,7 @@ function DynamicForm() {
     const newInputData = [...formData];
     newInputData[index].input = value;
     setFormData(newInputData);
+    localStorage.setItem("formData", JSON.stringify(newInputData));
   };
 
   // select change handler
@@ -19,12 +22,17 @@ function DynamicForm() {
     const newSelectData = [...formData];
     newSelectData[index].select = value;
     setFormData(newSelectData);
+    localStorage.setItem("formData", JSON.stringify(newSelectData));
   };
 
   // add new field handler
   const addNewField = (e) => {
     e.preventDefault();
     setFormData([...formData, { input: "", select: "" }]);
+    localStorage.setItem(
+      "formData",
+      JSON.stringify([...formData, { input: "", select: "" }])
+    );
   };
 
   // delete field handler
@@ -32,6 +40,7 @@ function DynamicForm() {
     const updateFormData = [...formData];
     updateFormData.splice(index, 1);
     setFormData(updateFormData);
+    localStorage.setItem("formData", JSON.stringify(updateFormData));
 
     // Optional approach - useful for api data like filtering with _id
     // const result = updateFormData.filter((item, idx) => idx !== index);
