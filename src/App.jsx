@@ -54,11 +54,11 @@ function DynamicForm() {
 
   return (
     <>
-      <section className="pt-10 md:pt-20 max-w-3xl px-4 mx-auto">
+      <section className="py-10 md:py-20 max-w-3xl px-4 mx-auto">
         {/* form with text input and select options */}
         <form
           onSubmit={handleSubmit}
-          className="p-5 bg-base-100 shadow-xl rounded-xl"
+          className="p-5 bg-base-100 shadow-md rounded-lg"
         >
           {/* dynamicaly render input and select */}
           {formData.map((field, index) => (
@@ -148,8 +148,8 @@ function DynamicForm() {
           </div>
         </form>
 
-        {/* Display form state */}
-        <div className="mt-5">
+        {/* display form state */}
+        <div className="mt-8">
           <h2 className="text-3xl border-b border-gray-400 pb-3 mb-3">
             Form State:
           </h2>
@@ -166,6 +166,35 @@ function DynamicForm() {
             </h3>
           ))}
         </div>
+
+        {/* display submitted form data in table */}
+        <h2 className="text-3xl border-b border-gray-400 pb-3 mb-3 mt-8">
+          Submitted Form Data:
+        </h2>
+        {submittedData && (
+          <div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-100 shadow-md">
+            <table className="table">
+              {/* head */}
+              <thead>
+                <tr>
+                  <th>Serial</th>
+                  <th>Input</th>
+                  <th>Selected</th>
+                </tr>
+              </thead>
+              <tbody>
+                {/* dynamicaly show submitted data */}
+                {submittedData.map((item, idx) => (
+                  <tr className="hover:bg-base-300">
+                    <th>{idx + 1}</th>
+                    <td>{item?.input}</td>
+                    <td>{item?.select}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </section>
     </>
   );
