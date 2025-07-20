@@ -29,16 +29,27 @@ function DynamicForm() {
 
   // delete field handler
   const deleteField = (index) => {
-    console.log(index);
     const updateFormData = [...formData];
     updateFormData.splice(index, 1);
-    console.log("After", updateFormData);
     setFormData(updateFormData);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Before", formData);
+
+    const newErrors = formData.map((item) => {
+      const inputError = item.input === "" ? "Input is required" : "";
+      const selectError = item.select === "" ? "Select is required" : "";
+      return { input: inputError, select: selectError };
+    });
+
+    setErrors(newErrors);
+
+    // check if there is any errors
+    const hasErrors = newErrors.some((item) => item.input || item.select);
+    if (!hasErrors) {
+      setSubmittedData(formData);
+    }
   };
 
   return (
@@ -52,11 +63,11 @@ function DynamicForm() {
           {/* dynamicaly render input and select */}
           {formData.map((field, index) => (
             <div
-              className="flex items-end gap-3 mb-3 pb-3 border-b border-gray-300"
+              className="flex items-center gap-3 mb-2 pb-1 border-b border-gray-300"
               key={index}
             >
               {/* text input */}
-              <fieldset className="fieldset flex-3">
+              <fieldset className="fieldset flex-2">
                 <div>
                   <legend className="fieldset-legend">
                     What is your name?
@@ -68,6 +79,13 @@ function DynamicForm() {
                     value={field.input}
                     onChange={(e) => handleInputChange(e.target.value, index)}
                   />
+                  {errors[index]?.input ? (
+                    <span className="text-xs text-red-500">
+                      {errors[index].input}
+                    </span>
+                  ) : (
+                    <p className="invisible">_</p>
+                  )}
                 </div>
               </fieldset>
 
@@ -93,13 +111,20 @@ function DynamicForm() {
                     <option value="Junior Developer">Junior Developer</option>
                     <option value="Senior Developer">Senior Developer</option>
                   </select>
+                  {errors[index]?.select ? (
+                    <span className="text-xs text-red-500">
+                      {errors[index].select}
+                    </span>
+                  ) : (
+                    <p className="invisible">_</p>
+                  )}
                 </div>
               </fieldset>
 
               {/* delete field button */}
               <button
                 title="Delete this input field"
-                className="btn btn-error mb-1"
+                className="btn btn-error mt-3 text-white"
                 onClick={() => deleteField(index)}
               >
                 X
