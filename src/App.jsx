@@ -10,6 +10,19 @@ function DynamicForm() {
 
   const [errors, setErrors] = useState([]);
 
+  // input change handler
+  const handleInputChange = (value, index) => {
+    const newInputData = [...formData];
+    newInputData[index].input = value;
+    setFormData(newInputData);
+  };
+
+  const handleSelectChange = (value, index) => {
+    const newSelectData = [...formData];
+    newSelectData[index].select = value;
+    setFormData(newSelectData);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Form Data", e.target);
@@ -23,11 +36,13 @@ function DynamicForm() {
           onSubmit={handleSubmit}
           className="p-5 bg-base-100 shadow-xl rounded-xl"
         >
+          {/* dynamicaly render input and select */}
           {formData.map((field, index) => (
             <div
               className="flex gap-3 mb-3 pb-3 border-b border-gray-300"
               key={index}
             >
+              {/* text input */}
               <fieldset className="fieldset flex-3">
                 <div>
                   <legend className="fieldset-legend">
@@ -38,18 +53,21 @@ function DynamicForm() {
                     type="text"
                     placeholder="Enter text"
                     value={field.input}
+                    onChange={(e) => handleInputChange(e.target.value, index)}
                   />
                 </div>
               </fieldset>
 
+              {/* select with options */}
               <fieldset className="fieldset flex-1">
                 <div>
                   <legend className="fieldset-legend">Your role?</legend>
                   <select
                     defaultValue="Pick a browser"
                     className="select w-full"
+                    onChange={(e) => handleSelectChange(e.target.value, index)}
                   >
-                    <option disabled={true}>Select</option>
+                    <option disabled={true}>Select Role</option>
                     <option>Frontend Developer</option>
                     <option>Backend Developer</option>
                     <option>Fullstack Developer</option>
@@ -61,12 +79,13 @@ function DynamicForm() {
             </div>
           ))}
 
+          {/* submit and add new field buttons */}
           <div className="flex gap-4 pt-4">
             <button type="submit" className="btn btn-primary flex-3">
               Submit
             </button>
             <button
-              title="Add Field"
+              title="Add New Field"
               type="submit"
               className="btn btn-secondary text-2xl flex-1"
             >
@@ -82,8 +101,14 @@ function DynamicForm() {
           </h2>
           {formData.map((item, index) => (
             <h3 key={index} className="text-xl pb-2">
-              {index + 1}. Input: {item.input || "(empty)"} | Select:{" "}
-              {item.select || "(empty)"}
+              {index + 1}. Input:{" "}
+              <span className="bg-primary/10 font-semibold">
+                {item.input || "(empty)"}
+              </span>{" "}
+              | Select:{" "}
+              <span className="bg-primary/10 font-semibold">
+                {item.select || "(empty)"}
+              </span>
             </h3>
           ))}
         </div>
