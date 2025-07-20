@@ -32,14 +32,18 @@ function DynamicForm() {
     const updateFormData = [...formData];
     updateFormData.splice(index, 1);
     setFormData(updateFormData);
+
+    // Optional approach - useful for api data like filtering with _id
+    // const result = updateFormData.filter((item, idx) => idx !== index);
+    // setFormData(updateFormData);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const newErrors = formData.map((item) => {
-      const inputError = item.input === "" ? "Input is required" : "";
-      const selectError = item.select === "" ? "Select is required" : "";
+      const inputError = item.input.trim() === "" ? "Input is required" : "";
+      const selectError = item.select.trim() === "" ? "Select is required" : "";
       return { input: inputError, select: selectError };
     });
 
@@ -47,6 +51,7 @@ function DynamicForm() {
 
     // check if there is any errors
     const hasErrors = newErrors.some((item) => item.input || item.select);
+
     if (!hasErrors) {
       setSubmittedData(formData);
     }
@@ -126,6 +131,7 @@ function DynamicForm() {
                 title="Delete this input field"
                 className="btn btn-error mt-3 text-white"
                 onClick={() => deleteField(index)}
+                disabled={formData.length === 1}
               >
                 X
               </button>
@@ -171,7 +177,7 @@ function DynamicForm() {
         <h2 className="text-3xl border-b border-gray-400 pb-3 mb-3 mt-8">
           Submitted Form Data:
         </h2>
-        {submittedData && (
+        {submittedData ? (
           <div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-100 shadow-md">
             <table className="table">
               {/* head */}
@@ -194,6 +200,8 @@ function DynamicForm() {
               </tbody>
             </table>
           </div>
+        ) : (
+          <p>No Data submitted yet!</p>
         )}
       </section>
     </>
