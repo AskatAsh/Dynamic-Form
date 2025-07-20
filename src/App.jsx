@@ -1,10 +1,7 @@
 import { useState } from "react";
 
 function DynamicForm() {
-  const [formData, setFormData] = useState([
-    { input: "", select: "" },
-    { input: "", select: "" },
-  ]);
+  const [formData, setFormData] = useState([{ input: "", select: "" }]);
 
   const [submittedData, setSubmittedData] = useState(null);
 
@@ -25,13 +22,23 @@ function DynamicForm() {
   };
 
   // add new field handler
-  const addNewField = () => {
+  const addNewField = (e) => {
+    e.preventDefault();
     setFormData([...formData, { input: "", select: "" }]);
+  };
+
+  // delete field handler
+  const deleteField = (index) => {
+    console.log(index);
+    const updateFormData = [...formData];
+    updateFormData.splice(index, 1);
+    console.log("After", updateFormData);
+    setFormData(updateFormData);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form Data", e.target);
+    console.log("Before", formData);
   };
 
   return (
@@ -45,7 +52,7 @@ function DynamicForm() {
           {/* dynamicaly render input and select */}
           {formData.map((field, index) => (
             <div
-              className="flex gap-3 mb-3 pb-3 border-b border-gray-300"
+              className="flex items-end gap-3 mb-3 pb-3 border-b border-gray-300"
               key={index}
             >
               {/* text input */}
@@ -69,19 +76,34 @@ function DynamicForm() {
                 <div>
                   <legend className="fieldset-legend">Your role?</legend>
                   <select
-                    defaultValue="Select Role"
+                    value={field.select}
                     className="select w-full"
                     onChange={(e) => handleSelectChange(e.target.value, index)}
                   >
-                    <option disabled={true}>Select Role</option>
-                    <option>Frontend Developer</option>
-                    <option>Backend Developer</option>
-                    <option>Fullstack Developer</option>
-                    <option>Junior Developer</option>
-                    <option>Senior Developer</option>
+                    <option value="" disabled={true}>
+                      Select Role
+                    </option>
+                    <option value="Frontend Developer">
+                      Frontend Developer
+                    </option>
+                    <option value="Backend Developer">Backend Developer</option>
+                    <option value="Fullstack Developer">
+                      Fullstack Developer
+                    </option>
+                    <option value="Junior Developer">Junior Developer</option>
+                    <option value="Senior Developer">Senior Developer</option>
                   </select>
                 </div>
               </fieldset>
+
+              {/* delete field button */}
+              <button
+                title="Delete this input field"
+                className="btn btn-error mb-1"
+                onClick={() => deleteField(index)}
+              >
+                X
+              </button>
             </div>
           ))}
 
