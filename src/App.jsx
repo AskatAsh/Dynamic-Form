@@ -17,10 +17,16 @@ function DynamicForm() {
     setFormData(newInputData);
   };
 
+  // select change handler
   const handleSelectChange = (value, index) => {
     const newSelectData = [...formData];
     newSelectData[index].select = value;
     setFormData(newSelectData);
+  };
+
+  // add new field handler
+  const addNewField = () => {
+    setFormData([...formData, { input: "", select: "" }]);
   };
 
   const handleSubmit = (e) => {
@@ -63,7 +69,7 @@ function DynamicForm() {
                 <div>
                   <legend className="fieldset-legend">Your role?</legend>
                   <select
-                    defaultValue="Pick a browser"
+                    defaultValue="Select Role"
                     className="select w-full"
                     onChange={(e) => handleSelectChange(e.target.value, index)}
                   >
@@ -88,6 +94,7 @@ function DynamicForm() {
               title="Add New Field"
               type="submit"
               className="btn btn-secondary text-2xl flex-1"
+              onClick={addNewField}
             >
               +
             </button>
